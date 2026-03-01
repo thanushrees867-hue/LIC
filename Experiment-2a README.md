@@ -75,6 +75,14 @@ VDS = Vout − VS
 VDS = 0.8 − 0.2
 VDS = 0.6 V
 
+For PMOS:
+VSD = VDD − Vout
+VSD = 1.2 − 0.8048
+VSD = 0.3952 V
+VOV(p) = 0.25 V
+Since VSD > VOV(p),
+PMOS operates in saturation region.
+
 gm = 2ID / Vov
 gm = (2 × 200µA) / 0.25
 gm = 1.6 mS
@@ -116,6 +124,7 @@ Vout = 0.8048 V
 ID(M1) = 200 µA
 ID(M2) = 200 µA
 Transistors operating in saturation region.
+ID=un*Cox*(W/L)*(Vov)^2*(1/2)
 Theoritical calculated width, W for NMOS = 4.9954um, W for PMOS = 11.823um.
 In Simulation for ID=200uA and Vout=0.8V , W for NMOS = 29.995um, W for PMOS = 26.023um
 
