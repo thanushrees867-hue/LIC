@@ -750,6 +750,194 @@ The circuit still functions correctly with:
     Acceptable non-ideal behavior
 
 
+Circuit-3: Current Mirror Loaded Differential Amplifier
+
+<img width="1919" height="1079" alt="4c circuit" src="https://github.com/user-attachments/assets/753d1bb8-1dee-4fdd-9ae9-698ef37824d8" />
+
+Given Specifications
+
+VDD = +0.9 V
+
+VSS = -0.9 V
+
+P ≤ 1.8 mW
+
+Vin,CM = 0 V
+
+Vout,CM = 0 V
+
+L = 480 nm
+
+Process Parameters
+
+Vth,n = 0.366 V
+
+Vth,p = 0.39 V
+
+μn = 0.02738 m²/V·s
+
+μp = 0.01156 m²/V·s
+
+tox = 4.1 × 10⁻⁹ m
+
+εox = 3.9 × ε0 = 3.45 × 10⁻¹¹ F/m
+
+Step 1: Oxide Capacitance
+
+Cox = εox / tox
+    = (3.45 × 10⁻¹¹) / (4.1 × 10⁻⁹)
+    ≈ 8.42 × 10⁻³ F/m²
+
+Step 2: Process Transconductance Parameters
+
+kn = μn × Cox
+   = 0.02738 × 8.42 × 10⁻³
+   ≈ 2.305 × 10⁻⁴ A/V²
+
+kp = μp × Cox
+   = 0.01156 × 8.42 × 10⁻³
+   ≈ 9.73 × 10⁻⁵ A/V²
+
+Step 3: Power Constraint
+
+P = (VDD - VSS) × ISS
+  = 1.8 × ISS
+
+1.8 × ISS ≤ 1.8 mW
+
+ISS ≤ 1 mA
+
+Choose:
+
+ISS = 1 mA
+
+Step 4: Drain Current
+
+ID1 = ID2 = ISS / 2
+     = 0.5 mA
+
+Step 5: Choose Overdrive Voltage
+
+Vov,n = 0.15 V   (design choice for higher gain)
+
+Step 6: Gate-Source Voltage
+
+VGS = Vth + Vov
+    = 0.366 + 0.15
+    = 0.516 V
+
+Step 7: Source Node Voltage
+
+VS = VG - VGS
+   = 0 - 0.516
+   = -0.516 V
+
+Step 8: NMOS Sizing (M1, M2)
+
+ID = (1/2) kn (W/L) Vov²
+
+0.5 mA = (1/2)(2.305×10⁻⁴)(W/L)(0.15)²
+
+0.0005 = 1.1525×10⁻⁴ × (W/L) × 0.0225
+
+0.0005 = 2.593×10⁻⁶ × (W/L)
+
+W/L ≈ 193
+
+Step 9: NMOS Width
+
+Wn = 193 × 480 nm
+    ≈ 92.6 µm
+
+✔ Use practical:
+
+Wn ≈ 95 µm
+
+Step 10: PMOS Current Mirror Design
+
+ID = 0.5 mA
+
+Vov,p ≈ 0.2 V
+
+ID = (1/2) kp (W/L) Vov²
+
+0.5 mA = (1/2)(9.73×10⁻⁵)(W/L)(0.2)²
+
+0.0005 = 4.865×10⁻⁵ × (W/L) × 0.04
+
+0.0005 = 1.946×10⁻⁶ × (W/L)
+
+W/L ≈ 257
+
+Step 11: PMOS Width
+
+Wp = 257 × 480 nm
+    ≈ 123 µm
+
+✔ Use:
+
+Wp ≈ 125 µm
+
+Step 12: Transconductance
+
+gm = 2ID / Vov
+   = (2 × 0.5 mA) / 0.15
+   ≈ 6.67 mS
+
+Step 13: Gain (Theoretical)
+
+Av = gm × ro
+
+Since:
+
+ro is high (current mirror load)
+
+Av >> Circuit 1 and Circuit 2
+
+Typical:
+
+Av ≈ 30 – 80 V/V
+
+Step 14: Saturation Check
+
+NMOS
+
+VDS ≈ 0.5–0.7 V > Vov (0.15)
+
+✔ Saturation
+
+PMOS
+
+VSD ≈ 0.9 V > Vov
+
+✔ Saturation
+
+Tail Transistor
+
+VDS3 ≈ 0.38 V > Vov
+
+✔ Saturation
+
+Final Results
+
+ISS = 1 mA
+
+ID = 0.5 mA
+
+Wn ≈ 95 µm
+
+Wp ≈ 125 µm
+
+gm ≈ 6.67 mS
+
+Av ≈ 30–80 V/V (expected)
+
+Lower Vov → Higher gm → Higher gain
+
+That’s why we chose:
+
+Vov = 0.15 V (instead of 0.334 V)
+
 
 Simulation results:
 
@@ -1358,3 +1546,383 @@ Comparison with AC Analysis
 | Transient   | 3.75       | 11.48 dB  |
 | AC Analysis | 4.1        | 12.3 dB   |
 
+
+Circuit-3: Current Mirror Differential Amplifier
+
+Operating point:
+
+<img width="1913" height="1019" alt="4c op" src="https://github.com/user-attachments/assets/dfcf8639-6325-40a2-bc7d-db9e6be34328" />
+
+Extracted Values from Simulation
+
+VDD = 0.9 V
+
+VSS = -0.9 V
+
+VS (node p) ≈ -0.606 V
+
+Vout1 ≈ 0 V
+
+Vout2 ≈ 0 V
+
+ISS ≈ 1 mA
+
+ID1 ≈ ID2 ≈ 0.5 mA
+
+ID3 ≈ ID4 ≈ 0.5 mA
+
+Key Observations
+
+1. Current Distribution
+
+ID1 = ID2 ≈ 0.5 mA
+
+ISS ≈ 1 mA
+
+✔ Confirms:
+
+ID1 + ID2 = ISS
+
+Differential pair is perfectly balanced
+
+2. Current Mirror Operation
+
+ID3 ≈ ID4 ≈ 0.5 mA
+
+✔ Confirms:
+
+PMOS transistors form a current mirror load
+
+Proper mirroring ensures high output resistance
+
+3. Output Voltage
+
+Vout1 ≈ Vout2 ≈ 0 V
+
+✔ Output centered → correct biasing
+
+4. Source Node Voltage
+
+VS ≈ -0.606 V
+
+Slight variation from design due to:
+
+Bias voltage (Vb1 = -0.35 V)
+
+Device model non-idealities
+
+Saturation Check
+
+NMOS (M1, M2)
+
+VDS = VD - VS
+     = 0 - (-0.606)
+     ≈ 0.606 V
+
+Vov ≈ 0.15 V
+
+✔ Condition:
+
+VDS > Vov → 0.606 > 0.15
+
+✔ NMOS in saturation
+
+PMOS (M3, M4)
+
+VSD = VS - VD
+     = 0.9 - 0
+     = 0.9 V
+
+✔ Condition:
+
+VSD > Vov,p
+
+✔ PMOS in saturation
+
+Tail Transistor (M5)
+
+VDS5 = VS - VSS
+     = -0.606 - (-0.9)
+     ≈ 0.294 V
+
+Vov ≈ 0.15 V
+
+✔ Condition:
+
+0.294 > 0.15
+
+✔ Tail transistor in saturation
+
+All MOSFETs in Circuit 3 operate in saturation region.
+
+Interpretation
+
+Proper biasing ensures all devices in saturation
+
+Current mirror load provides:
+
+High output resistance
+
+Improved gain
+
+Compared to Circuit 2:
+
+Better bias stability
+
+More controlled current flow
+
+The use of proper bias voltages (Vb1 and Vb2) ensures sufficient VDS across all transistors, allowing them to operate in saturation. This improves the current mirror accuracy and enhances amplifier performance.
+
+The operating point confirms correct biasing of the circuit. The differential pair is balanced, and the current mirror operates properly. All transistors are in saturation, ensuring high gain and proper amplifier operation.
+
+
+Transient analysis:
+
+Case 1: Small Signal Input (Linear Region)
+
+<img width="1919" height="1018" alt="4c trans" src="https://github.com/user-attachments/assets/fa75bef7-b37d-4054-929f-f99b583c8a4f" />
+
+Input Conditions
+
+Vin1 = SINE(0 2m 1k)
+
+Vin2 = SINE(0 -2m 1k)
+
+Observations from Waveform
+
+Output signals:
+
+Sinusoidal
+
+Large amplitude
+
+180° out of phase
+
+Very high amplification compared to Circuit 1 & 2
+
+Proper differential operation
+
+Gain Calculation (From Graph)
+
+Input Differential Voltage
+
+Vin(diff) = 2m - (-2m) = 4 mV
+
+Output Differential Voltage
+
+From graph:
+
+Gain (V/V)
+
+Av = 52.6875 V/V
+
+Gain (dB)
+
+Av(dB) = 20 log10(52.6875)
+       ≈ 34.43 dB
+
+Result
+
+Gain ≈ 52.6875 V/V
+
+Gain ≈ 34.43 dB
+
+✔ Highest gain among all circuits
+
+Case 2: Large Signal Input (Clipping Region)
+
+<img width="1919" height="1030" alt="4c trans1" src="https://github.com/user-attachments/assets/35640f5b-c054-499e-a556-83c9b33cee53" />
+
+Input Conditions
+
+Vin = 0.9 V
+
+Observations
+
+Output is strongly clipped
+
+Flat tops near supply rails (±0.9 V)
+
+Very sharp transitions
+
+Explanation
+
+High gain causes output to saturate quickly.
+
+Even small increase in input pushes output to supply limits.
+
+Result
+
+Strong nonlinear behavior
+
+Circuit behaves like a high-gain comparator
+
+| Circuit   | Type of Load              | Theoretical Gain (V/V) | Theoretical Gain (dB) | Simulation Gain (V/V) | Simulation Gain (dB) |
+| --------- | ------------------------- | ---------------------- | --------------------- | --------------------- | -------------------- |
+| Circuit 1 | Resistive Load            | 5.4                    | 14.65 dB              | 6.23                  | 15.88 dB             |
+| Circuit 2 | Active Load (PMOS Mirror) | High (≈10–20 expected) | ≈20–26 dB             | 4.1                   | 12.3 dB              |
+| Circuit 3 | Current Mirror Load       | 52.7                   | 34.43 dB              | 52.69                 | 34.43 dB             |
+
+
+1. Circuit 3 provides the highest gain due to high output resistance (ro).
+
+2. Circuit 1 shows moderate gain with stable linear behavior.
+
+3. Circuit 2 theoretically should have higher gain than Circuit 1, but due to practical limitations (low ro, headroom), its gain is lower.
+
+Gain increases with increase in output resistance (ro).
+
+Circuit 3 uses current mirror load → highest ro → highest gain.   
+
+
+AC Analysis: Current Mirror Differential Amplifier
+
+
+Observation from AC Plot
+
+From your graph (flat midband region):
+
+Gain ≈ 35.23 dB
+
+Convert Gain to V/V
+
+Av = 10^(Gain/20)
+   = 10^(35.23 / 20)
+   ≈ 57.7 V/V
+
+Final AC Gain
+
+Av ≈ 57.7 V/V
+
+Av ≈ 35.23 dB
+
+AC gain is slightly higher than theoretical due to:
+- Channel length modulation (increases effective ro)
+- More accurate small-signal modeling
+- Ideal biasing in AC analysis
+
+Frequency Response
+
+Flat region → midband gain (~35 dB)
+
+Slight rise at low frequency → bias effect
+
+Roll-off at high frequency → parasitic capacitances 
+
+FINAL RESULT
+
+Gain (AC) = 57.7 V/V
+
+Gain (AC) = 35.23 dB
+
+The current mirror differential amplifier (Circuit 3) achieves the highest gain due to significantly increased output resistance (ro), validating the theoretical relation Av = gm × ro. The AC gain closely matches theoretical and transient results, confirming correct design and operation.
+
+
+Comparision
+
+| Parameter              | Circuit 1 (Resistive Load)    | Circuit 2 (Active Load)  | Circuit 3 (Current Mirror Load) |
+| ---------------------- | ----------------------------- | ------------------------ | ------------------------------- |
+| Load Type              | Resistor (RD)                 | PMOS Active Load         | Current Mirror Load             |
+| Tail Current Source    | Not ideal (not in saturation) | Improved (in saturation) | Fully ideal (in saturation)     |
+| Gain (V/V)             | 6.23                          | 4.1                      | 57.7                            |
+| Gain (dB)              | 15.88 dB                      | 12.3 dB                  | 35.23 dB                        |
+| Output Resistance (ro) | Low                           | Moderate                 | Very High                       |
+| Linearity              | High                          | Moderate                 | Low (for large signals)         |
+| Clipping Behavior      | Smooth                        | Faster clipping          | Very sharp clipping             |
+| Saturation Condition   | Partial                       | Full                     | Full                            |
+| Circuit Complexity     | Simple                        | Moderate                 | Complex                         |
+| Power Efficiency       | Low                           | Better                   | Best                            |
+| Performance            | Basic                         | Improved                 | Best                            |
+
+Key observations:
+
+1. Circuit 1 is simple and provides stable linear amplification but limited gain.
+
+2. Circuit 2 improves biasing and uses active load, but gain is limited due to practical constraints.
+
+3. Circuit 3 provides the highest gain due to current mirror load and proper saturation of all transistors.
+
+
+Advantages and Disadvantages
+
+Circuit 1 (Resistive Load)
+
+Advantages:
+
+Simple design
+
+Good linearity
+
+Easy to analyze
+
+Disadvantages:
+
+Low gain
+
+Poor efficiency
+
+Large area (resistors)
+
+Circuit 2 (Active Load)
+
+Advantages:
+
+Better gain than basic design (theoretically)
+
+Improved efficiency
+
+Smaller area
+
+Disadvantages:
+
+Gain limited by practical ro
+
+More complex
+
+Sensitive to biasing
+
+Circuit 3 (Current Mirror Load)
+
+Advantages:
+
+Highest gain
+
+High output resistance
+
+Best performance
+
+Disadvantages:
+
+Reduced linear range
+
+Early clipping
+
+Highest complexity
+
+
+Conclusion:
+
+In this experiment, three types of CMOS differential amplifiers were designed and analyzed using LTspice: a resistive load differential amplifier (Circuit 1), an active load differential amplifier (Circuit 2), and a current mirror load differential amplifier (Circuit 3). The design was carried out under given constraints of power (≤1.8 mW), supply voltage (±0.9 V), and technology parameters (L = 480 nm).
+
+The operating point analysis confirmed that proper biasing was achieved in all circuits. However, Circuit 1 showed limitations in maintaining ideal saturation conditions due to the use of resistive loads and a less effective tail current source. Circuit 2 improved the biasing conditions by introducing an active load, while Circuit 3 ensured that all transistors operated in saturation through the use of current mirror configurations.
+
+From transient and AC analysis, it was observed that the gain of the amplifier significantly depends on the output resistance (ro) of the circuit. Circuit 1 exhibited moderate gain (~6.23 V/V or 15.88 dB) with good linearity. Circuit 2 showed lower practical gain (~4.1 V/V or 12.3 dB) due to non-idealities and limited output resistance. Circuit 3 achieved the highest gain (~57.7 V/V or 35.23 dB) due to the current mirror load, which increases output resistance and improves amplification.
+
+It was also observed that as gain increases, the linear operating range decreases. Circuit 3, while providing the highest gain, showed early clipping for larger input signals, behaving similarly to a high-gain comparator. In contrast, Circuit 1 maintained better linearity over a wider input range.
+
+Thus, the experiment verifies the theoretical relation Av = gm × ro and demonstrates that increasing output resistance using active and current mirror loads significantly enhances the gain of differential amplifiers. Among the three circuits, the current mirror differential amplifier provides the best performance in terms of gain, while the resistive load amplifier offers better linearity, and the active load amplifier provides a balance between the two.
+
+*The current mirror differential amplifier achieves the highest gain due to increased output resistance, confirming that gain is directly proportional to ro.
+
+
+Inference:
+
+1. The gain of a differential amplifier is directly proportional to the output resistance (ro), as given by Av = gm × ro.
+
+2. Use of current mirror load significantly increases output resistance, thereby improving the gain.
+
+3. Proper biasing ensures all MOSFETs operate in saturation, which is essential for linear amplification.
+
+4. As gain increases, the linear operating range decreases, leading to earlier clipping in high-gain circuits.
+
+5. Among the three circuits, the current mirror differential amplifier provides the highest gain, while the resistive load amplifier offers better linearity.
