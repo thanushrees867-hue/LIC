@@ -223,6 +223,9 @@ Design Calculations:
 
 Circuit-1:
 
+<img width="1209" height="1021" alt="4a circuit" src="https://github.com/user-attachments/assets/4db44087-521f-47da-ba29-0bb0fd52047d" />
+
+
 Given Specifications
 
 VDD = +0.9 V
@@ -397,7 +400,50 @@ Tail transistor (M3) does not fully satisfy saturation condition due to limited 
 Circuit operates correctly but deviates slightly from ideal current source behavior.
 
 
+Tail Current Source (M3) Not in Saturation
+
+In the first circuit (differential amplifier with resistive load), the tail transistor (M3) is expected to operate in the saturation region so that it behaves like an ideal current source. However, due to the given bias conditions, this requirement is not fully satisfied.
+
+The source node voltage is given as:
+
+VS = Vp = -0.7 V
+
+The supply voltage is:
+
+VSS = -0.9 V
+
+Therefore, the drain-to-source voltage of the tail transistor is:
+
+VDS3 = VS - VSS
+     = -0.7 - (-0.9)
+     = 0.2 V
+
+The overdrive voltage of NMOS is:
+
+Vov = VGS - Vth
+    = 0.7 - 0.366
+    = 0.334 V
+
+For saturation:
+
+VDS ≥ Vov
+
+But here:
+
+0.2 V < 0.334 V
+
+Hence, the tail transistor does not satisfy the saturation condition.
+
+Justification
+
+This occurs due to limited voltage headroom in the circuit. Since the total supply voltage is only 1.8 V (from +0.9 V to −0.9 V), there is insufficient voltage across the tail transistor to maintain saturation while also keeping the input transistors properly biased.
+
+Thus, the tail transistor operates in the linear region, behaving like a resistor instead of an ideal current source. However, it still approximately maintains the required current, allowing the circuit to function correctly with slight deviation from ideal behavior.
+
+
 Circuit-2: Differential Amplifier with Active Load
+
+<img width="1895" height="1079" alt="4b circuit" src="https://github.com/user-attachments/assets/c99cff59-c9bd-4dbf-9547-e8a2da1a6bb1" />
 
 Given Specifications
 
@@ -550,4 +596,765 @@ ro ≫ RD
 Approximate:
 
 Av = gm × ro
+
+Step 12: Saturation Check
+
+NMOS:
+
+VDS,n = VD - VS ≈ sufficient
+
+✔ In saturation
+
+PMOS:
+
+VSD,p ≥ Vov,p
+
+✔ Must be ensured
+
+Tail Transistor:
+
+VDS3 = 0.2 V < Vov
+
+✘ Not fully in saturation
+
+Final Results
+
+ISS = 1 mA
+
+ID = 0.5 mA
+
+Vov,n = 0.334 V
+
+Wn ≈ 21.5 µm
+
+Wp ≈ 120 µm
+
+gm ≈ 2.99 mS
+
+Av >> Circuit 1
+
+Important Observations
+
+Active load increases output resistance
+
+Gain is much higher than resistive load circuit
+
+PMOS devices must be wider due to lower mobility
+
+Tail transistor still limited by voltage headroom
+
+Circuit provides better efficiency and performance
+
+
+In the second circuit, which uses a PMOS active load (current mirror configuration), all MOSFETs are ideally expected to operate in the saturation region for proper differential amplification. However, due to circuit constraints and biasing conditions, some MOSFETs may not strictly satisfy the saturation condition.
+
+Saturation Condition
+
+For NMOS:
+
+VDS ≥ Vov
+
+For PMOS:
+
+VSD ≥ Vov
+
+NMOS Transistors (M1, M2)
+
+The source voltage is fixed as:
+
+VS = Vp = -0.7 V
+
+The overdrive voltage is:
+
+Vov = 0.334 V
+
+The drain voltage depends on the PMOS active load. Unlike Circuit 1, the drain is not fixed at 0 V but is controlled by the PMOS current mirror.
+
+Due to this:
+
+VDS = VD - VS
+
+If the PMOS load pulls the drain voltage down:
+
+VD decreases → VDS reduces
+
+When:
+
+VDS < 0.334 V
+
+the NMOS transistors enter the linear region.
+
+Justification
+
+The active load (PMOS current mirror) dynamically controls the drain voltage.
+
+The low supply voltage (±0.9 V) limits the available voltage headroom.
+
+The fixed source voltage Vp=−0.7V reduces the effective VDS.
+
+Hence, NMOS transistors may not always remain in saturation.
+
+PMOS Transistors (Active Load: M3, M4)
+
+For PMOS:
+
+VSD = VS - VD
+
+Here:
+
+VS = VDD = 0.9 V
+
+For saturation:
+
+VSD ≥ Vov,p
+
+However, since the drain voltage is determined by the NMOS operation:
+
+VD increases → VSD decreases
+
+If:
+
+VSD < Vov,p
+
+then PMOS transistors enter the linear region.
+
+Justification
+
+The PMOS devices form a current mirror, so their operation depends on NMOS drain voltage.
+
+Any increase in drain voltage reduces VSD, affecting saturation.
+
+Due to limited voltage headroom, it is difficult to maintain both NMOS and PMOS in saturation simultaneously.
+
+Key Reason
+
+Low supply voltage (±0.9 V) → Limited voltage headroom
+
+This creates a trade-off condition:
+
+If NMOS stays in saturation → PMOS may leave saturation
+
+If PMOS stays in saturation → NMOS may leave saturation
+
+Thus, all transistors cannot be perfectly in saturation at the same time.
+
+Finally,
+
+Due to low voltage headroom and active load interaction, some MOSFETs in Circuit 2 do not strictly satisfy saturation conditions.
+
+This is a practical limitation, not a design error.
+
+The circuit still functions correctly with:
+    Proper current steering
+    Improved gain compared to Circuit 1
+    Acceptable non-ideal behavior
+
+
+
+Simulation results:
+
+Circuit 1: Differential Amplifier with Resistive Load
+
+1. Operating Point Analysis (.op)
+
+Procedure:
+
+Run .op simulation in LTspice
+
+Observe node voltages and drain currents
+
+Expected Results:
+
+ID1 ≈ ID2 ≈ 0.5 mA
+
+Vout ≈ 0 V
+
+VS ≈ -0.7 V
+
+Screenshot:
+
+<img width="1918" height="1076" alt="4a op" src="https://github.com/user-attachments/assets/0922cc87-4a67-4920-92da-0ad5b11f60e6" />
+
+Extracted Values from Simulation
+
+VDD = 0.9 V
+VSS = -0.9 V
+
+VS (node p) ≈ -0.7157 V
+Vout1 ≈ 0 V
+Vout2 ≈ 0 V
+
+ISS = 1 mA
+ID1 = ID2 ≈ 0.5 mA
+
+I(R1) = I(R2) ≈ 0.5 mA
+
+Key Observations
+
+1. Current Distribution
+
+ID1 = ID2 = 0.5 mA
+
+ISS = 1 mA
+
+✔ Confirms:
+
+ID1 + ID2 = ISS
+
+Differential pair is perfectly balanced
+
+2. Output Voltage
+
+Vout1 ≈ Vout2 ≈ 0 V
+
+✔ Matches design condition:
+
+Vout,CM = 0 V
+
+3. Source Node Voltage
+
+VS ≈ -0.7157 V
+
+✔ Close to given:
+
+Vp = -0.7 V
+
+Small deviation due to device model + current source behavior
+
+Saturation Check
+
+NMOS (M1, M2)
+
+VDS = VD - VS
+     = 0 - (-0.7157)
+     ≈ 0.716 V
+Vov = 0.334 V
+
+✔ Condition:
+
+VDS > Vov → 0.716 > 0.334
+
+✔ NMOS in saturation
+
+Tail Transistor (M3)
+
+VDS3 = VS - VSS
+     = -0.7157 - (-0.9)
+     ≈ 0.184 V
+Vov = 0.334 V
+
+❌ Condition:
+
+0.184 < 0.334
+
+❌ Tail transistor not in saturation
+
+Final Interpretation
+
+Differential pair is perfectly symmetric
+
+Output is correctly centered at 0 V
+
+Drain currents match theoretical values
+
+NMOS transistors operate in saturation region
+
+Tail current source operates in linear region
+
+Justification
+
+Due to low supply voltage (±0.9 V), the voltage across the tail transistor is insufficient to satisfy the saturation condition (VDS < Vov). Hence, it operates in the linear region. However, it still maintains approximately constant current, allowing proper differential operation.
+
+
+Transient Analysis
+
+Case 1: Small Signal Input (No Clipping)
+
+<img width="1918" height="1070" alt="4a trans" src="https://github.com/user-attachments/assets/ce2b548d-2bb8-4998-aa67-3c6efa4b46ef" />
+
+Input Conditions
+
+Vin1 = SINE(0 2m 1k)
+
+Vin2 = SINE(0 -2m 1k)
+
+Observations from Waveform
+
+Output signals Vout1 and Vout2 are:
+
+Sinusoidal
+
+Equal amplitude
+
+180° out of phase
+
+No distortion observed
+
+Circuit operates in linear region
+
+Gain Calculation (From Graph)
+
+Input Differential Voltage
+
+Vin(diff) = Vin1 - Vin2 = 2m - (-2m) = 4 mV (peak)
+
+Output Differential Voltage
+
+From graph:
+
+Vout ≈ 12 mV (peak)
+
+Gain (V/V)
+
+Av = Vout / Vin
+   = 12 mV / 4 mV
+   = 3 V/V
+
+Gain (dB)
+
+Av(dB) = 20 log10(3)
+       ≈ 9.54 dB
+
+Comparison with Theoretical Gain
+
+Theoretical Av ≈ 5.4 V/V
+
+Reason for Difference
+
+Lower gain observed due to:
+- Tail transistor not in saturation
+- Small signal approximation limitations
+- Real device model effects (channel length modulation, etc.)
+
+Result
+
+Gain ≈ 3 V/V
+
+Gain ≈ 9.54 dB
+
+Linear amplification confirmed
+
+Case 2: Large Signal Input (Clipping Region)
+
+<img width="1919" height="1071" alt="4a trans1" src="https://github.com/user-attachments/assets/200ef695-cddf-4611-9344-192e73677094" />
+
+Input Conditions
+
+Vin1 = SINE(0 0.9 1k)
+
+Vin2 = SINE(0 -0.9 1k)
+
+Observations from Waveform
+
+Output is not sinusoidal
+
+Clear clipping at ±0.9 V
+
+Flat tops indicate saturation of output
+
+Explanation
+
+When input amplitude exceeds linear range:
+- One transistor turns OFF
+- Other transistor carries full current
+- Output reaches supply limits
+
+Key Condition
+
+Linear operation: Vid < √2 × Vov
+
+Vov = 0.334 V
+
+√2 × Vov ≈ 0.472 V
+
+Since:
+
+Vin(diff) ≈ 1.8 V >> 0.472 V
+
+❌ Circuit operates in nonlinear region
+
+Result
+
+Output is clipped at supply rails
+
+Differential amplifier behaves like a switch
+
+Nonlinear behavior confirmed
+
+Final Interpretation
+
+Small Signal Case
+-Linear operation
+-Gain measurable
+-Matches differential amplifier theory
+
+Large Signal Case
+-Nonlinear operation
+-Clipping occurs
+-Limited by supply voltage
+
+Key Conclusion
+
+The circuit operates as a linear amplifier only for small differential inputs. When the input exceeds the linear range, the output saturates at the supply limits, resulting in clipping and nonlinear behavior.
+
+gain (3 V/V) is lower than expected (5.4 V/V)
+
+The reduction in gain compared to theoretical value is due to non-ideal current source behavior and limited voltage headroom.
+
+
+AC Analysis:
+
+Observation from AC Plot
+
+From your graph (flat region at mid-frequency):
+
+Gain ≈ 15.88 dB
+
+Convert Gain to V/V
+
+Av = 10^(Gain(dB) / 20)
+   = 10^(15.88 / 20)
+   ≈ 6.23 V/V
+
+Final AC Gain
+
+Av ≈ 6.23 V/V
+
+Av ≈ 15.88 dB
+
+Comparison with Theoretical Gain
+
+Theoretical Value
+
+Av = gm × RD
+   = 2.99 mS × 1.8 kΩ
+   ≈ 5.4 V/V
+
+Av(dB) = 20 log10(5.4)
+       ≈ 14.65 dB
+
+| Type          | Gain (V/V) | Gain (dB) |
+| ------------- | ---------- | --------- |
+| Theoretical   | 5.4        | 14.65 dB  |
+| AC Simulation | 6.23       | 15.88 dB  |
+
+Interpretation
+
+Simulation gain is slightly higher than theoretical value due to:
+- Channel length modulation (finite ro)
+- Device model non-idealities
+- More accurate small-signal modeling in AC analysis
+
+AC analysis provides more accurate gain compared to transient analysis because it directly uses small-signal parameters without nonlinear effects.
+
+Frequency Response Observation
+
+Gain is constant at mid-frequency → flat region
+
+Gain drops at low frequency → due to biasing effects
+
+Gain rolls off at high frequency → due to parasitic capacitances
+
+Conclusion for circuit 1: The AC analysis shows a gain of approximately 6.23 V/V (15.88 dB), which closely matches the theoretical value of 5.4 V/V. The slight deviation is due to non-ideal device effects. The circuit exhibits proper amplification with stable midband gain.
+
+
+Circuit-2: Active Load Differential Amplifier
+
+Operating point:
+
+<img width="1919" height="1076" alt="4b op" src="https://github.com/user-attachments/assets/3d496584-70de-41f8-99e8-16c4afab2861" />
+
+Extracted Values from Simulation
+
+VDD = 0.9 V
+
+VSS = -0.9 V
+
+VS (node p) ≈ -0.545 V
+
+Vout1 ≈ 0 V
+
+Vout2 ≈ 0 V
+
+ID1 ≈ ID2 ≈ 0.5 mA
+
+ID4 ≈ ID5 ≈ 0.5 mA
+
+ISS ≈ 1 mA
+
+Key Observations
+
+1. Current Distribution
+
+ID1 = ID2 ≈ 0.5 mA
+
+ISS ≈ 1 mA
+
+✔ Confirms:
+
+ID1 + ID2 = ISS
+
+Differential pair is perfectly balanced
+
+2. Current Mirror Operation (PMOS)
+
+ID4 ≈ ID5 ≈ 0.5 mA
+
+✔ Confirms:
+
+PMOS transistors form a current mirror
+
+Active load is functioning correctly
+
+3. Output Voltage
+
+Vout1 ≈ Vout2 ≈ 0 V
+
+✔ Output is centered → proper biasing
+
+4. Source Node Voltage
+
+VS ≈ -0.545 V
+
+Different from Circuit 1 (-0.7 V) because:
+
+Biasing is now controlled by Vb
+
+Tail transistor is actively biased
+
+Saturation Check
+
+NMOS (M1, M2)
+
+VDS = VD - VS
+     = 0 - (-0.545)
+     ≈ 0.545 V
+
+Vov ≈ 0.334 V
+
+✔ Condition:
+
+VDS > Vov → 0.545 > 0.334
+
+✔ NMOS in saturation
+
+PMOS (M4, M5)
+
+VSD = VS - VD
+     = 0.9 - 0
+     = 0.9 V
+
+✔ Condition:
+
+VSD > Vov,p
+
+✔ PMOS in saturation
+
+Tail Transistor (M3)
+
+VDS3 = VS - VSS
+     = -0.545 - (-0.9)
+     ≈ 0.355 V
+
+✔ Compare:
+
+Vov ≈ 0.334 V
+
+✔ Condition:
+
+0.355 > 0.334
+
+✔ Tail transistor is in saturation
+
+*All MOSFETs in Circuit 2 operate in saturation region.
+
+Interpretation
+
+Proper biasing using Vb = -0.35 V improves operation
+
+Active load ensures:
+
+Higher output resistance
+
+Better gain
+
+Unlike Circuit 1:
+
+Tail transistor is now fully in saturation
+
+Current source behaves more ideally
+
+In Circuit 2, the use of a bias voltage (Vb) ensures sufficient VDS across the tail transistor, allowing it to remain in saturation. This improves current source behavior and enhances amplifier performance compared to Circuit 1.
+
+The operating point confirms that all transistors are properly biased in saturation. The differential pair is balanced, and the active load operates correctly as a current mirror. This results in improved performance compared to the resistive load circuit.
+
+
+Transient Analysis
+
+Case 1: Small Signal Input (Linear Region)
+
+<img width="1919" height="1078" alt="4b trans" src="https://github.com/user-attachments/assets/77ad8c30-1f40-451f-9284-e6a2c6f1851a" />
+
+Input Conditions
+
+Vin1 = SINE(0 2m 1k)
+
+Vin2 = SINE(0 -2m 1k)
+
+Observations from Waveform
+
+Output signals are:
+
+Sinusoidal
+
+Amplified
+
+180° out of phase
+
+No distortion
+
+Proper differential amplification
+
+Gain Calculation (From Graph)
+
+Input Differential Voltage
+
+Vin(diff) = 2m - (-2m) = 4 mV (peak)
+
+Output Differential Voltage
+
+From graph:
+
+Gain (V/V)
+
+Av = 3.75 V/V
+
+Gain (dB)
+
+Av(dB) = 20 log10(3.75)
+       ≈ 11.48 dB
+
+Result
+
+Gain ≈ 3.75 V/V
+
+Gain ≈ 11.48 dB
+
+Justification
+
+Although active load ideally increases gain, the observed gain is lower due to:
+- Limited voltage headroom
+- Output node not having large ro in practical model
+- Possible mismatch in PMOS current mirror
+- Small signal extraction from transient is less accurate
+
+Case 2: Large Signal Input (Clipping Region)
+
+<img width="1919" height="1078" alt="4b trans1" src="https://github.com/user-attachments/assets/ef4bc301-68e8-41fd-a32f-dac59252a149" />
+
+Input Conditions
+
+Vin1 = SINE(0 0.9 1k)
+
+Vin2 = SINE(0 -0.9 1k)
+
+Observations
+
+Output is highly distorted
+
+Sharp transitions → switching behavior
+
+Output swings close to supply limits (~1.2 V)
+
+Explanation
+
+Large differential input causes:
+- One transistor fully ON
+- Other transistor OFF
+- Current mirror forces abrupt switching
+
+Result
+
+Strong nonlinear behavior
+
+Circuit behaves like a comparator/switch
+
+| Feature           | Circuit 1       | Circuit 2             |
+| ----------------- | --------------- | --------------------- |
+| Small Signal Gain | ~3 V/V          | ~1.75 V/V             |
+| Linearity         | Better          | Slightly reduced      |
+| Large Signal      | Smooth clipping | Sharp switching       |
+| Behavior          | Amplifier       | Amplifier + switching |
+
+The active load circuit shows sharper transitions and higher nonlinearity compared to the resistive load circuit due to current mirror action.
+
+Transient analysis may not reflect true gain of active load amplifier. AC analysis must be used for accurate gain measurement.
+
+The circuit operates linearly for small signals but exhibits strong nonlinear behavior for large inputs. The gain obtained from transient analysis is lower than expected due to non-ideal effects and measurement limitations.
+
+
+AC Analysis
+
+<img width="1919" height="1079" alt="4b ac" src="https://github.com/user-attachments/assets/2e15f5e8-d60f-4127-a5d1-a43106591be1" />
+
+Observation from AC Plot
+
+From your graph (flat midband region):
+
+Gain ≈ 12.3 dB
+
+(Blue trace is flat ≈ constant gain)
+
+Convert Gain to V/V
+
+Av = 10^(Gain/20)
+   = 10^(12.3 / 20)
+   ≈ 4.12 V/V
+
+Final AC Gain
+
+Av ≈ 4.1 V/V
+
+Av ≈ 12.3 dB
+
+Justification
+
+Although active load ideally increases gain, the observed gain is lower due to:
+
+1. Limited output resistance (ro) in practical CMOS model
+
+2. Low supply voltage (±0.9 V) reducing voltage headroom
+
+3. PMOS current mirror not providing ideal high resistance
+
+4. Channel length modulation reducing effective gain
+
+5. Device sizing not optimized for maximum gain
+
+Frequency Response Observation
+
+Gain is flat in midband → proper amplifier operation
+
+Peak around ~100 Hz (due to bias/network effects)
+
+Gain decreases at high frequency → parasitic capacitances
+
+Active load increases gain only if output resistance is high.
+
+In this design, ro is limited, so gain improvement is not observed.
+
+The AC analysis shows a gain of approximately 4.1 V/V (12.3 dB). Although active load is expected to increase gain, practical limitations such as low output resistance and limited voltage headroom result in lower gain compared to Circuit 1.
+
+FINAL RESULT 
+
+Gain (AC) = 4.1 V/V
+
+Gain (AC) = 12.3 dB
+
+Comparison with AC Analysis
+
+| Method      | Gain (V/V) | Gain (dB) |
+| ----------- | ---------- | --------- |
+| Transient   | 3.75       | 11.48 dB  |
+| AC Analysis | 4.1        | 12.3 dB   |
 
