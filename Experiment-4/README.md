@@ -1727,6 +1727,24 @@ Gain ≈ 52.6875 V/V
 
 Gain ≈ 34.43 dB
 
+Theoretical gain:
+
+Av=-gm,n*(ro,n||ro,p)
+
+ro,n = 1/lamda*Id = 20k ohm  (lamda=0.1)
+
+ro,p = 1/lamda*Id = 16.666k ohm (lamda=0.12)
+
+gm = 2*Id/Vov
+
+Vov = 0.15V
+
+Gm,n = 6.667e-3
+
+Av = -60.6096V/V
+
+AvdB = 35.6508dB
+
 ✔ Highest gain among all circuits
 
 Case 2: Large Signal Input (Clipping Region)
@@ -1761,7 +1779,7 @@ Circuit behaves like a high-gain comparator
 | --------- | ------------------------- | ---------------------- | --------------------- | --------------------- | -------------------- |
 | Circuit 1 | Resistive Load            | 5.4                    | 14.65 dB              | 6.23                  | 15.88 dB             |
 | Circuit 2 | Active Load (PMOS Mirror) | High (≈10–20 expected) | ≈20–26 dB             | 4.1                   | 12.3 dB              |
-| Circuit 3 | Current Mirror Load       | 52.7                   | 34.43 dB              | 52.69                 | 34.43 dB             |
+| Circuit 3 | Current Mirror Load       | 60.6096                | 35.65 dB              | 52.69                 | 34.43 dB             |
 
 
 1. Circuit 3 provides the highest gain due to high output resistance (ro).
